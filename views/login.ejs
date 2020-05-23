@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>LOGIN PAGE</title>
+    <%- include('./layout/head'); -%>
+</head>
+<body>
+<div class="fluid-container bg-light">
+    <%- include('./layout/header'); -%>
+    <div id="body">
+        <div class="bg-white text-center"><h1>LOGIN</h1></div>
+        <div class="text-center container p-5">
+            <form action="#" method="post">
+                <div class="form-group">
+                    <label for="email">Email address:</label>
+                    <input type="email" class="form-control" name="email" placeholder="Enter email" id="email">
+
+                </div>
+                <div class="form-group">
+                    <label for="pwd">Password:</label>
+                    <input type="password" class="form-control" name="password" placeholder="Enter password" id="pwd">
+                </div>
+            </form>
+            <div class="result text-danger p-3"></div>
+            <button type="submit" class="btn btn-primary btn-block ajaxLogin">LOGIN</button>
+        </div>
+    </div>
+    <div id="footer">
+
+    </div>
+</div>
+<script>
+    document.querySelector('.ajaxLogin').addEventListener('click',function(){
+        var email = document.getElementsByName('email')[0].value;
+        var password = document.getElementsByName('password')[0].value;
+        sendAjax('http://localhost:3000/login', {'email':email,'password':password} );
+    })
+
+    function sendAjax(url, data){
+        data = JSON.stringify(data);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST',url);
+        xhr.setRequestHeader('Content-Type', "application/json");
+        xhr.send(data);
+
+        xhr.addEventListener('load',function(){
+            var result = JSON.parse(xhr.responseText);
+            var resultDiv = document.querySelector(".result");
+            if(result.email) window.location.href="/";
+            else resultDiv.innerHTML = result;
+        });
+    }
+</script>
+</body>
+</html>
