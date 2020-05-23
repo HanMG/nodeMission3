@@ -34,7 +34,7 @@ passport.use('local-join', new LocalStrategy({
     passwordField: 'password',
     passReqToCallback : true
 }, function(req, email, password, done){
-   var query = connection.query('select * from tbl_user where email = ?', [email], function(err,rows){
+   var query = connection.query('select * from tbl_user where email = ?',[email], function(err,rows){
         console.log("1");
         if(err) return done(err);
         if(rows.length){
@@ -43,26 +43,25 @@ passport.use('local-join', new LocalStrategy({
         } else{
             var sql = {email: email, name: req.body.name, pw: password}
             var query = connection.query('insert into tbl_user set ?',sql,function(err,rows){
-                return done(null, {'email': email,'name': req.body.name,'id': rows.insertId})
+                return done(null, {'email': email, 'name': req.body.name})
             })
         }
    })
 }
 ))
 
-router.post('/',function(req,res,next){
-    console.log("0");
+router.post('/',function(req, res, next){
+    console.log("post join js");
     passport.authenticate('local-join', function(err,user,info){
-        console.log("2");
-        var responseData = {}
+        var responseData = {};
         if(err) res.status(500).json(err);
-        if(!user){
+        if(user){
             responseData.result = "ok";
             return res.json(responseData);
         }else{
             return res.json(info.message);
         }
-    })
+    })(req, res, next);
 })
 
 module.exports = router

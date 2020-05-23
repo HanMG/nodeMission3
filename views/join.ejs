@@ -14,15 +14,15 @@
             <form action="#" method="post">
                  <div class="form-group">
                    <label for="email">Email address:</label>
-                   <input type="email" class="form-control" name="email" placeholder="Enter email" id="email">
+                   <input type="email" class="form-control" name="email" placeholder="Enter email" id="email" required>
                  </div>
                  <div class="form-group">
                    <label for="name">Name:</label>
-                   <input type="text" class="form-control" name="name" placeholder="Enter name" id="name">
+                   <input type="text" class="form-control" name="name" placeholder="Enter name" id="name" required>
                  </div>
                  <div class="form-group">
                    <label for="pwd">Password:</label>
-                   <input type="password" class="form-control" name="password" placeholder="Enter password" id="pwd">
+                   <input type="password" class="form-control" name="password" placeholder="Enter password" id="pwd" required>
                  </div>
             </form>
             <div class="result text-danger p-3"></div>
@@ -37,8 +37,9 @@
 <script>
     document.querySelector('.ajaxJoin').addEventListener('click',function(){
         var email = document.getElementsByName('email')[0].value;
-        var password = document.getElementsByName('password')[0].value;
         var name = document.getElementsByName('name')[0].value;
+        var password = document.getElementsByName('password')[0].value;
+
         sendAjax('http://localhost:3000/join', {'email':email, 'name': name, 'password':password} );
     })
 
@@ -57,7 +58,7 @@
                 alert("등록되었습니다.");
                 window.location.href="/";
             }
-            else if(result.result == 'fail') resultDiv.innerHTML = "already Exist Email!!";
+            else resultDiv.innerHTML = "already Exist Email!!";
         });
     }
 </script>

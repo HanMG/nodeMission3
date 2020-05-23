@@ -1,12 +1,10 @@
 var express = require('express')
 var app = express()
 var router = express.Router()
-var path = require('path')
 var mysql = require('mysql')
 // 로그인을 위해
 var passport = require('passport')
 var LocalStrategy = require('passport-local').Strategy
-
 
 // 루트에 config라는 하위폴더를 만들고 모듈로 만들어 exports했고
 var dbconfig = require('../../config/database.js')
@@ -41,7 +39,6 @@ passport.use('local-login', new LocalStrategy({
     session: true,
     passReqToCallback : true
 }, function(req, email, password, done){
-    console.log("1")
    var query = connection.query('select * from tbl_user where email = ? and pw = ?', [email,password], function(err,rows){
         if(err) return done(err)
         if(rows.length){
@@ -56,7 +53,7 @@ passport.use('local-login', new LocalStrategy({
 router.post('/', function(req, res, next){
     passport.authenticate('local-login', function(err,user,info){
         if(err) res.status(500).json(err);
-        if(!user) return res.status(401).json(info.message);
+        if(!user) return res.json(info.message);
 
         req.logIn(user, function(err) {
               if (err) { return next(err); }
